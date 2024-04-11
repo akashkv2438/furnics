@@ -147,10 +147,13 @@ module.exports = {
   findorders: async (req, res) => {
     const userid = req.session.userId;
     const isUser = req.session.loggedIn;
+    const cartProduct = await userH.findProduct(userid);
+    const cartlength= cartProduct.cart.cart.length
+    const cartcount =cartlength > 0 ? cartlength : null
 
     const orders = await orderH.orderfinding(userid);
 
-    res.render("users/myorders", { orders, isUser });
+    res.render("users/myorders", { orders, isUser, cartcount });
   },
   
 };

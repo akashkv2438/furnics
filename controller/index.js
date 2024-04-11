@@ -13,16 +13,20 @@ module.exports = {
     const user =await userH.findProduct(userid)
     if(user && user.cart && user.cart.cart){
       const cartItems = user.cart.cart
-      const cartcount =cartItems.length
+      const cartlength =cartItems.length
+      const cartcount = cartlength > 0 ? cartlength : null
+      
       res.render("users/index", { prodata,banner, isUser,cartcount });
+      
     } 
     else{
       if(req.session.cart){
-        const cartcount = req.session.cart.length
+        const cartlength = req.session.cart.length
+        const cartcount = cartlength > 0 ? cartlength : null
       res.render("users/index", { prodata,banner,cartcount});
       }
       else{
-      res.render("users/index", { prodata,banner,cartcount:0});
+      res.render("users/index", { prodata,banner});
       }
 
     }

@@ -197,7 +197,8 @@ module.exports = {
         cartItems = cartItems.concat(req.session.cart);
       }
 
-      let cartcount = cartItems.length;
+      let cartlength = cartItems.length;
+      let cartcount = cartlength >0 ? cartlength : null
       let sum1 = cartItems.reduce((sum, item) => sum + item.price, 0);
       let totalSum = sum1 + 5;
       let stock = true;
@@ -517,14 +518,16 @@ module.exports = {
   wishlist: async (req, res) => {
     const isUser = req.session.loggedIn;
     const userId = req.session.userId;
+    const cartProduct = await userH.findProduct(userId);
+    const cartlength= cartProduct.cart.cart.length
+    const cartcount =cartlength > 0 ? cartlength : null
     const wishlist = await userH.findingwishlistProducts(userId);
-    console.log(wishlist);
     if (!wishlist || wishlist.products.length === 0) {
-      res.render("users/wishlist", { wishlist: [], isUser: isUser });
+      res.render("users/wishlist", { wishlist: [], isUser: isUser ,cartcount });
     } else {
       res.render("users/wishlist", {
         wishlist: wishlist.products,
-        isUser: isUser,
+        isUser: isUser, cartcount
       });
     }
   },
